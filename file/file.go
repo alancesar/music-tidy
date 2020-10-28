@@ -2,10 +2,13 @@ package file
 
 import (
 	"fmt"
+	"github.com/alancesar/music-tidy/metadata"
+	"github.com/alancesar/music-tidy/sanitize"
 	"os"
+	"strings"
 )
 
-func CheckFile(path string) error {
+func Check(path string) error {
 	stat, err := os.Stat(path)
 	if err != nil {
 		return err
@@ -20,4 +23,11 @@ func CheckFile(path string) error {
 
 func Move(source, dest string) error {
 	return os.Rename(source, dest)
+}
+
+func BuildFilename(metadata metadata.Metadata, extension string) string {
+	title := sanitize.Sanitize(metadata.Title)
+	filename := fmt.Sprintf("%02d - %s%s", metadata.Track, title, extension)
+	sanitized := strings.TrimSpace(filename)
+	return sanitized
 }

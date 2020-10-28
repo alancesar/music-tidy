@@ -17,7 +17,7 @@ func main() {
 	fmt.Println("Reading source directory...")
 	paths := make([]string, 0)
 	_ = filepath.Walk(*rootSourcePath, func(path string, info os.FileInfo, err error) error {
-		if err := file.CheckFile(path); err != nil {
+		if err := file.Check(path); err != nil {
 			return nil
 		}
 
