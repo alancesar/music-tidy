@@ -12,7 +12,7 @@ import (
 
 var MetadataErr = errors.New("no metadata found")
 
-func Process(path, root string, move bool) (string, error) {
+func Process(path, root string) (string, error) {
 	var err error
 
 	source, err := os.Open(path)
@@ -28,20 +28,16 @@ func Process(path, root string, move bool) (string, error) {
 		return "", MetadataErr
 	}
 
-	artistAndAlbumPath, err := dir.CreateArtistAndAlbumDirectory(root, m)
-	if err != nil {
+	artistAndAlbumPath := dir.BuildArtistAndAlbumPath(m)
+	completePath := fmt.Sprintf("%s/%s", root, artistAndAlbumPath)
+	completeCleanPath := filepath.Clean(completePath)
+	if err := os.MkdirAll(completeCleanPath, os.ModePerm); err != nil {
 		return "", err
 	}
 
 	ext := filepath.Ext(path)
-	filename := dir.BuildFilename(ext, m)
-	destination := fmt.Sprintf("%s/%s", artistAndAlbumPath, filename)
+	filename := dir.BuildFilename(m, ext)
+	destination := fmt.Sprintf("%s/%s", completeCleanPath, filename)
 
-	if move {
-		err = file.Move(path, destination)
-	} else {
-		err = file.Copy(source, destination)
-	}
-
-	return destination, err
+	return destination, file.Move(path, destination)
 }

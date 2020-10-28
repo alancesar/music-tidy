@@ -2,7 +2,6 @@ package file
 
 import (
 	"fmt"
-	"io"
 	"os"
 )
 
@@ -17,19 +16,6 @@ func CheckFile(path string) error {
 	}
 
 	return nil
-}
-
-func Copy(source io.ReadSeeker, dest string) error {
-	output, err := os.Create(dest)
-	if err != nil {
-		return err
-	}
-	defer func() {
-		_ = output.Close()
-	}()
-
-	_, err = io.Copy(output, source)
-	return err
 }
 
 func Move(source, dest string) error {

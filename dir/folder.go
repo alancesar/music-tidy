@@ -3,25 +3,25 @@ package dir
 import (
 	"fmt"
 	"github.com/alancesar/music-tidy/metadata"
-	"os"
 	"strings"
 )
 
-func CreateArtistAndAlbumDirectory(root string, metadata metadata.Metadata) (string, error) {
-	artist := removeSlash(metadata.Artist)
-	album := removeSlash(metadata.Album)
-	path := fmt.Sprintf("%s/%s/[%d] %s", root, artist, metadata.Year, album)
+func BuildArtistAndAlbumPath(metadata metadata.Metadata) string {
+	artist := sanitize(metadata.Artist)
+	album := sanitize(metadata.Album)
+	path := fmt.Sprintf("%s/[%d] %s", artist, metadata.Year, album)
 	sanitized := strings.TrimSpace(path)
-	return path, os.MkdirAll(sanitized, os.ModePerm)
+	return sanitized
 }
 
-func BuildFilename(extension string, metadata metadata.Metadata) string {
-	title := removeSlash(metadata.Title)
+func BuildFilename(metadata metadata.Metadata, extension string) string {
+	title := sanitize(metadata.Title)
 	filename := fmt.Sprintf("%02d - %s%s", metadata.Track, title, extension)
 	sanitized := strings.TrimSpace(filename)
 	return sanitized
 }
 
-func removeSlash(string string) string {
-	return strings.ReplaceAll(string, "/", "-")
+func sanitize(string string) string {
+	string = strings.ReplaceAll(string, "/", "-")
+	return strings.ReplaceAll(string, ":", " -")
 }

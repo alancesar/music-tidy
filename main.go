@@ -12,10 +12,9 @@ import (
 func main() {
 	rootSourcePath := flag.String("s", "./", "source directory")
 	rootDestinationPath := flag.String("o", "./", "output directory")
-	move := flag.Bool("m", false, "move original file")
 	flag.Parse()
 
-	fmt.Println("reading source directory...")
+	fmt.Println("Reading source directory...")
 	paths := make([]string, 0)
 	_ = filepath.Walk(*rootSourcePath, func(path string, info os.FileInfo, err error) error {
 		if err := file.CheckFile(path); err != nil {
@@ -29,7 +28,7 @@ func main() {
 	total := len(paths)
 
 	for index, path := range paths {
-		destination, err := processor.Process(path, *rootDestinationPath, *move)
+		destination, err := processor.Process(path, *rootDestinationPath)
 		if err != nil && err != processor.MetadataErr {
 			panic(err)
 		}
