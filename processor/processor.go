@@ -36,7 +36,7 @@ func Process(path, root string) (string, error) {
 	}
 
 	ext := filepath.Ext(path)
-	filename := dir.BuildFilename(m, ext)
+	filename := file.BuildFilename(m, ext)
 	destination := fmt.Sprintf("%s/%s", completePath, filename)
 
 	return destination, file.Move(path, destination)
