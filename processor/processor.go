@@ -28,16 +28,16 @@ func Process(path, root string) (string, error) {
 		return "", MetadataErr
 	}
 
-	artistAndAlbumPath := dir.BuildArtistAndAlbumPath(m)
-	completePath := fmt.Sprintf("%s/%s", root, artistAndAlbumPath)
-	completeCleanPath := filepath.Clean(completePath)
-	if err := os.MkdirAll(completeCleanPath, os.ModePerm); err != nil {
+	completePath := dir.BuildPath(m)
+	completePath = fmt.Sprintf("%s/%s", root, completePath)
+	completePath = filepath.Clean(completePath)
+	if err := os.MkdirAll(completePath, os.ModePerm); err != nil {
 		return "", err
 	}
 
 	ext := filepath.Ext(path)
 	filename := dir.BuildFilename(m, ext)
-	destination := fmt.Sprintf("%s/%s", completeCleanPath, filename)
+	destination := fmt.Sprintf("%s/%s", completePath, filename)
 
 	return destination, file.Move(path, destination)
 }

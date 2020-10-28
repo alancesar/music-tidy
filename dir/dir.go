@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func BuildArtistAndAlbumPath(metadata metadata.Metadata) string {
+func BuildPath(metadata metadata.Metadata) string {
 	artist := sanitize(metadata.Artist)
 	album := sanitize(metadata.Album)
 	path := fmt.Sprintf("%s/[%d] %s", artist, metadata.Year, album)
