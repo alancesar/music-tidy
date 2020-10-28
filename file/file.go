@@ -21,10 +21,6 @@ func Check(path string) error {
 	return nil
 }
 
-func Move(source, dest string) error {
-	return os.Rename(source, dest)
-}
-
 func BuildFilename(metadata metadata.Metadata, extension string) string {
 	title := sanitize.Sanitize(metadata.Title)
 	filename := fmt.Sprintf("%02d - %s%s", metadata.Track, title, extension)
