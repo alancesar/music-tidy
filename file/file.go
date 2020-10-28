@@ -19,14 +19,19 @@ func CheckFile(path string) error {
 	return nil
 }
 
-func Copy(dest string, source io.ReadSeeker) (int64, error) {
+func Copy(source io.ReadSeeker, dest string) error {
 	output, err := os.Create(dest)
 	if err != nil {
-		return 0, err
+		return err
 	}
 	defer func() {
 		_ = output.Close()
 	}()
 
-	return io.Copy(output, source)
+	_, err = io.Copy(output, source)
+	return err
+}
+
+func Move(source, dest string) error {
+	return os.Rename(source, dest)
 }

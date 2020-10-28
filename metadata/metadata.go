@@ -20,11 +20,15 @@ func ExtractMetadata(r io.ReadSeeker) (Metadata, error) {
 	}
 
 	track, _ := metadata.Track()
+	artist := metadata.AlbumArtist()
+	if artist == "" {
+		artist = metadata.Artist()
+	}
 
 	return Metadata{
 		Track:  track,
 		Title:  metadata.Title(),
-		Artist: metadata.AlbumArtist(),
+		Artist: artist,
 		Album:  metadata.Album(),
 		Year:   metadata.Year(),
 	}, nil

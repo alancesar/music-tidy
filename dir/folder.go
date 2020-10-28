@@ -8,17 +8,20 @@ import (
 )
 
 func CreateArtistAndAlbumDirectory(root string, metadata metadata.Metadata) (string, error) {
-	artist := sanitize(metadata.Artist)
-	album := sanitize(metadata.Album)
+	artist := removeSlash(metadata.Artist)
+	album := removeSlash(metadata.Album)
 	path := fmt.Sprintf("%s/%s/[%d] %s", root, artist, metadata.Year, album)
-	return path, os.MkdirAll(path, os.ModePerm)
+	sanitized := strings.TrimSpace(path)
+	return path, os.MkdirAll(sanitized, os.ModePerm)
 }
 
-func BuildFullPath(root string, metadata metadata.Metadata) string {
-	title := sanitize(metadata.Title)
-	return fmt.Sprintf("%s/%02d - %s", root, metadata.Track, title)
+func BuildFilename(extension string, metadata metadata.Metadata) string {
+	title := removeSlash(metadata.Title)
+	filename := fmt.Sprintf("%02d - %s%s", metadata.Track, title, extension)
+	sanitized := strings.TrimSpace(filename)
+	return sanitized
 }
 
-func sanitize(filename string) string {
-	return strings.ReplaceAll(filename, "/", "-")
+func removeSlash(string string) string {
+	return strings.ReplaceAll(string, "/", "-")
 }
