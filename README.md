@@ -7,7 +7,7 @@ Organize your music library according its tags.
 go build
 ./music-tidy -s /origin/path -o /destination/path
 ```
-This command will move all music files to specified output directory following this structure:
+This command will move all music files to the specified output directory, following this structure:
 ```
 Artist
 └── [Year] Album
