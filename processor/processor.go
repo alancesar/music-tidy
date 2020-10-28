@@ -3,9 +3,9 @@ package processor
 import (
 	"errors"
 	"fmt"
-	"github.com/alancesar/music-tidy/dir"
-	"github.com/alancesar/music-tidy/file"
-	"github.com/alancesar/music-tidy/metadata"
+	"github.com/alancesar/tidy-music/dir"
+	"github.com/alancesar/tidy-music/file"
+	"github.com/alancesar/tidy-music/metadata"
 	"os"
 	"path/filepath"
 )

@@ -2,8 +2,8 @@ package file
 
 import (
 	"fmt"
-	"github.com/alancesar/music-tidy/metadata"
-	"github.com/alancesar/music-tidy/sanitize"
+	"github.com/alancesar/tidy-music/metadata"
+	"github.com/alancesar/tidy-music/sanitize"
 	"os"
 	"strings"
 )

@@ -1,4 +1,4 @@
-module github.com/alancesar/music-tidy
+module github.com/alancesar/tidy-music
 
 go 1.15
 

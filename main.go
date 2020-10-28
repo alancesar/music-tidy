@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/alancesar/music-tidy/file"
-	"github.com/alancesar/music-tidy/processor"
+	"github.com/alancesar/tidy-music/file"
+	"github.com/alancesar/tidy-music/processor"
 	"os"
 	"path/filepath"
 )
