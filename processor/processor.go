@@ -2,20 +2,18 @@ package processor
 
 import (
 	"errors"
-	"fmt"
-	"github.com/alancesar/tidy-music/dir"
-	"github.com/alancesar/tidy-music/file"
 	"github.com/alancesar/tidy-music/metadata"
+	"github.com/alancesar/tidy-music/path"
 	"os"
 	"path/filepath"
 )
 
 var MetadataErr = errors.New("no metadata found")
 
-func Process(path, root string) (string, error) {
+func Process(sourcePath, rootDestination, pattern string) (string, error) {
 	var err error
 
-	source, err := os.Open(path)
+	source, err := os.Open(sourcePath)
 	if err != nil {
 		return "", err
 	}
@@ -28,15 +26,20 @@ func Process(path, root string) (string, error) {
 		return "", MetadataErr
 	}
 
-	completePath := dir.BuildPath(m)
-	completePath = fmt.Sprintf("%s/%s", root, completePath)
-	completePath = filepath.Clean(completePath)
-	if err := os.MkdirAll(completePath, os.ModePerm); err != nil {
+	ext := filepath.Ext(sourcePath)
+	outputPath, err := path.BuildPath(pattern, ext, m)
+	if err != nil {
 		return "", err
 	}
 
-	ext := filepath.Ext(path)
-	filename := file.BuildFilename(m, ext)
-	destination := fmt.Sprintf("%s/%s", completePath, filename)
-	return destination, os.Rename(path, destination)
+	completePath := filepath.Join(rootDestination, outputPath)
+	completePath = filepath.Clean(completePath)
+
+	dir, _ := filepath.Split(completePath)
+	if err := os.MkdirAll(dir, os.ModePerm); err != nil {
+		return "", err
+	}
+
+	err = os.Rename(sourcePath, completePath)
+	return completePath, err
 }
