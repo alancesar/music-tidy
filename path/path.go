@@ -11,6 +11,8 @@ import (
 
 const defaultSeparator = "/"
 
+var InvalidArgErr = errors.New("invalid argument")
+
 func BuildPath(pattern, extension string, metadata metadata.Metadata) (string, error) {
 	parsed, err := template.New("path").Parse(pattern)
 	if err != nil {
@@ -18,7 +20,10 @@ func BuildPath(pattern, extension string, metadata metadata.Metadata) (string, e
 	}
 
 	buf := &bytes.Buffer{}
-	err = parsed.Execute(buf, metadata)
+	if err := parsed.Execute(buf, metadata); err != nil {
+		return "", InvalidArgErr
+	}
+
 	elements := strings.Split(buf.String()+extension, defaultSeparator)
-	return filepath.Join(elements...), err
+	return filepath.Join(elements...), nil
 }
