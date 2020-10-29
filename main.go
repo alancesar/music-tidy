@@ -17,6 +17,7 @@ func main() {
 	rootSourcePath := flag.String("s", "./", "source directory")
 	rootDestinationPath := flag.String("o", "./", "output directory")
 	pattern := flag.String("p", defaultPattern, "output pattern")
+	sandbox := flag.Bool("t", false, "run in sandbox mode")
 	flag.Parse()
 
 	fmt.Println("Reading source directory...")
@@ -33,7 +34,7 @@ func main() {
 	total := len(paths)
 
 	for index, path := range paths {
-		destination, err := processor.Process(path, *rootDestinationPath, *pattern)
+		destination, err := processor.Process(path, *rootDestinationPath, *pattern, *sandbox)
 		if err != nil && err != processor.MetadataErr {
 			panic(err)
 		}

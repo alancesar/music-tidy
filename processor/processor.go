@@ -10,7 +10,7 @@ import (
 
 var MetadataErr = errors.New("no metadata found")
 
-func Process(sourcePath, rootDestination, pattern string) (string, error) {
+func Process(sourcePath, rootDestination, pattern string, sandbox bool) (string, error) {
 	var err error
 
 	source, err := os.Open(sourcePath)
@@ -35,11 +35,14 @@ func Process(sourcePath, rootDestination, pattern string) (string, error) {
 	completePath := filepath.Join(rootDestination, outputPath)
 	completePath = filepath.Clean(completePath)
 
-	dir, _ := filepath.Split(completePath)
-	if err := os.MkdirAll(dir, os.ModePerm); err != nil {
-		return "", err
+	if !sandbox {
+		dir, _ := filepath.Split(completePath)
+		if err := os.MkdirAll(dir, os.ModePerm); err != nil {
+			return "", err
+		}
+
+		err = os.Rename(sourcePath, completePath)
 	}
 
-	err = os.Rename(sourcePath, completePath)
 	return completePath, err
 }
