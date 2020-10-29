@@ -8,17 +8,21 @@ import (
 	"strings"
 )
 
-func Check(path string) error {
+func IsFile(path string) bool {
 	stat, err := os.Stat(path)
 	if err != nil {
-		return err
+		return false
+	}
+
+	if stat.Mode().IsDir() {
+		return false
 	}
 
 	if !stat.Mode().IsRegular() {
-		return fmt.Errorf("%s is not a regular file", path)
+		return false
 	}
 
-	return nil
+	return true
 }
 
 func BuildFilename(metadata metadata.Metadata, extension string) string {
