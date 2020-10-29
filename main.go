@@ -17,7 +17,7 @@ func main() {
 	rootSourcePath := flag.String("s", "./", "source directory")
 	rootDestinationPath := flag.String("o", "./", "output directory")
 	pattern := flag.String("p", defaultPattern, "output pattern")
-	sandbox := flag.Bool("t", false, "run in sandbox mode")
+	sandbox := flag.Bool("t", false, "run in test mode")
 	flag.Parse()
 
 	fmt.Println("Reading source directory...")
