@@ -11,8 +11,6 @@ import (
 var MetadataErr = errors.New("no metadata found")
 
 func Process(sourcePath, rootDestination, pattern string, sandbox bool) (string, error) {
-	var err error
-
 	source, err := os.Open(sourcePath)
 	if err != nil {
 		return "", err
