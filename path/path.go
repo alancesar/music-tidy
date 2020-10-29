@@ -2,18 +2,17 @@ package path
 
 import (
 	"bytes"
+	"errors"
 	"github.com/alancesar/tidy-music/metadata"
 	"html/template"
 	"path/filepath"
 	"strings"
 )
 
-var pathTemplate = template.New("path")
-
 const defaultSeparator = "/"
 
 func BuildPath(pattern, extension string, metadata metadata.Metadata) (string, error) {
-	parsed, err := pathTemplate.Parse(pattern)
+	parsed, err := template.New("path").Parse(pattern)
 	if err != nil {
 		return "", err
 	}
