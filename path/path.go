@@ -4,9 +4,9 @@ import (
 	"bytes"
 	"errors"
 	"github.com/alancesar/tidy-music/metadata"
-	"html/template"
 	"path/filepath"
 	"strings"
+	"text/template"
 )
 
 const defaultSeparator = "/"
