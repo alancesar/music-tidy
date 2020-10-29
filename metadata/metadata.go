@@ -1,6 +1,7 @@
 package metadata
 
 import (
+	"github.com/alancesar/tidy-music/sanitize"
 	"github.com/dhowden/tag"
 	"io"
 )
@@ -27,9 +28,9 @@ func ExtractMetadata(r io.ReadSeeker) (Metadata, error) {
 
 	return Metadata{
 		Track:  track,
-		Title:  metadata.Title(),
-		Artist: artist,
-		Album:  metadata.Album(),
+		Title:  sanitize.Sanitize(metadata.Title()),
+		Artist: sanitize.Sanitize(artist),
+		Album:  sanitize.Sanitize(metadata.Album()),
 		Year:   metadata.Year(),
 	}, nil
 }

@@ -2,12 +2,32 @@
 
 Organize your music library according its tags.
 
-## Usage
+## Building
 ```sh
 go build
-./tidy-music -s /origin/path -o /destination/path
 ```
-This command will move all music files to the specified output directory, following this structure:
+
+## Usage
+```sh
+./tidy-music [-s] [-o] [-t] [-p]
+```
+
+### Parameters
+- **s**: The source path. Its default value is `./`.
+- **o**: The output path. Its default value also is `./`.
+- **t**: Test mode. If true only show the expected output. Its default is `false`.
+- **p**: The output directory structure pattern. It follows the
+Golang's [text/template](https://golang.org/pkg/text/template/) guide.
+Available fields:
+  - Artist
+  - Album
+  - Year
+  - Track number
+  - Title
+
+## Output
+The default `p` value is `{{.Artist}}/[{{.Year}}] {{.Album}}/{{printf "%02d" .Track}} - {{.Title}}` so the generated
+output will be this following structure:
 ```
 Artist
 └── [Year] Album
