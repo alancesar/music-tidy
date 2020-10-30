@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"github.com/alancesar/tidy-music/command"
-	"github.com/alancesar/tidy-music/file"
 	"github.com/alancesar/tidy-music/processor"
 	"os"
 	"path/filepath"
@@ -24,7 +23,7 @@ func main() {
 	fmt.Println("Reading source directory...")
 	paths := make([]string, 0)
 	_ = filepath.Walk(*rootSourcePath, func(path string, info os.FileInfo, err error) error {
-		if !file.IsFile(path) {
+		if info.IsDir() {
 			return nil
 		}
 
