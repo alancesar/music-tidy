@@ -4,9 +4,11 @@ import (
 	"flag"
 	"fmt"
 	"github.com/alancesar/tidy-music/command"
+	"github.com/alancesar/tidy-music/metadata"
 	"github.com/alancesar/tidy-music/mime"
 	"github.com/alancesar/tidy-music/path"
 	"os"
+	"path/filepath"
 )
 
 const (
@@ -14,8 +16,8 @@ const (
 )
 
 func main() {
-	rootSourcePath := flag.String("s", "./", "source directory")
-	rootDestinationPath := flag.String("o", "./", "output directory")
+	rootSourcePath := flag.String("s", "", "source directory")
+	rootDestinationPath := flag.String("o", "", "output directory")
 	pattern := flag.String("p", defaultPattern, "output pattern")
 	sandbox := flag.Bool("t", false, "run in test mode")
 	flag.Parse()
@@ -30,11 +32,33 @@ func main() {
 	}
 
 	for index, sourcePath := range paths {
-		destination, err := Process(sourcePath, *rootDestinationPath, *pattern, commands...)
+		destination, err := process(sourcePath, *rootDestinationPath, *pattern, commands...)
 		if err != nil {
 			fmt.Printf("(%d/%d) [failed ] %s\n", index+1, total, destination)
 		} else {
 			fmt.Printf("(%d/%d) [success] %s\n", index+1, total, destination)
 		}
 	}
+}
+
+func process(sourcePath, rootDestinationPath, pattern string, commands ...command.Command) (string, error) {
+	m, err := metadata.NewExtractor(sourcePath).Extract()
+	if err != nil {
+		return "", err
+	}
+
+	parsed, err := path.BuildFromPattern(pattern, m)
+	if err != nil {
+		return "", err
+	}
+
+	destinationPath := parsed + filepath.Ext(sourcePath)
+	destinationPath = filepath.Join(rootDestinationPath, destinationPath)
+	destinationPath = filepath.Clean(destinationPath)
+
+	if err := command.NewExecutor(sourcePath, destinationPath).Execute(commands...); err != nil {
+		return destinationPath, err
+	}
+
+	return destinationPath, nil
 }

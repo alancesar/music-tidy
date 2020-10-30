@@ -17,7 +17,7 @@ var InvalidArgErr = errors.New("invalid argument")
 func LookFor(rootPath string, t mime.Type) []string {
 	paths := make([]string, 0)
 	_ = filepath.Walk(rootPath, func(path string, info os.FileInfo, err error) error {
-		if !info.IsDir() && info.Mode().IsRegular() && mime.Is(path, t) {
+		if info != nil && !info.IsDir() && info.Mode().IsRegular() && mime.Is(path, t) {
 			paths = append(paths, path)
 		}
 
