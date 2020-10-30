@@ -3,7 +3,6 @@ package path
 import (
 	"bytes"
 	"errors"
-	"github.com/alancesar/tidy-music/metadata"
 	"github.com/alancesar/tidy-music/mime"
 	"os"
 	"path/filepath"
@@ -28,17 +27,17 @@ func LookFor(rootPath string, t mime.Type) []string {
 	return paths
 }
 
-func BuildPath(pattern, extension string, metadata metadata.Metadata) (string, error) {
+func BuildFromPattern(pattern string, source interface{}) (string, error) {
 	parsed, err := template.New("path").Parse(pattern)
 	if err != nil {
 		return "", err
 	}
 
 	buf := &bytes.Buffer{}
-	if err := parsed.Execute(buf, metadata); err != nil {
+	if err := parsed.Execute(buf, source); err != nil {
 		return "", InvalidArgErr
 	}
 
-	elements := strings.Split(buf.String()+extension, defaultSeparator)
+	elements := strings.Split(buf.String(), defaultSeparator)
 	return filepath.Join(elements...), nil
 }

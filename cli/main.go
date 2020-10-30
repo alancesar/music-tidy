@@ -6,7 +6,6 @@ import (
 	"github.com/alancesar/tidy-music/command"
 	"github.com/alancesar/tidy-music/mime"
 	"github.com/alancesar/tidy-music/path"
-	"github.com/alancesar/tidy-music/processor"
 	"os"
 )
 
@@ -26,13 +25,12 @@ func main() {
 	total := len(paths)
 
 	var commands []command.Command
-
 	if !*sandbox {
 		commands = []command.Command{command.MkDirCommand, os.Rename}
 	}
 
-	for index, p := range paths {
-		destination, err := processor.Process(p, *rootDestinationPath, *pattern, commands...)
+	for index, sourcePath := range paths {
+		destination, err := Process(sourcePath, *rootDestinationPath, *pattern, commands...)
 		if err != nil {
 			fmt.Printf("(%d/%d) [failed ] %s\n", index+1, total, destination)
 		} else {

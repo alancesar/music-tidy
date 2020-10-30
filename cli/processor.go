@@ -1,34 +1,25 @@
-package processor
+package main
 
 import (
 	"github.com/alancesar/tidy-music/command"
 	"github.com/alancesar/tidy-music/metadata"
 	"github.com/alancesar/tidy-music/path"
-	"os"
 	"path/filepath"
 )
 
-func Process(sourcePath, rootDestination, pattern string, commands ...command.Command) (string, error) {
-	source, err := os.Open(sourcePath)
-	if err != nil {
-		return "", err
-	}
-	defer func() {
-		_ = source.Close()
-	}()
-
-	m, err := metadata.ExtractMetadata(source)
+func Process(sourcePath, rootDestinationPath, pattern string, commands ...command.Command) (string, error) {
+	m, err := metadata.NewExtractor(sourcePath).Extract()
 	if err != nil {
 		return "", err
 	}
 
-	ext := filepath.Ext(sourcePath)
-	outputPath, err := path.BuildPath(pattern, ext, m)
+	destinationPath, err := path.BuildFromPattern(pattern, m)
 	if err != nil {
 		return "", err
 	}
 
-	destinationPath := filepath.Join(rootDestination, outputPath)
+	destinationPath = destinationPath + filepath.Ext(sourcePath)
+	destinationPath = filepath.Join(rootDestinationPath, destinationPath)
 	destinationPath = filepath.Clean(destinationPath)
 
 	if err := command.NewExecutor(sourcePath, destinationPath).Execute(commands...); err != nil {
