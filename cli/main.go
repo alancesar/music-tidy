@@ -56,9 +56,6 @@ func process(sourcePath, rootDestinationPath, pattern string, commands ...comman
 	destinationPath = filepath.Join(rootDestinationPath, destinationPath)
 	destinationPath = filepath.Clean(destinationPath)
 
-	if err := command.NewExecutor(sourcePath, destinationPath).Execute(commands...); err != nil {
-		return destinationPath, err
-	}
-
+	err = command.NewExecutor(sourcePath, destinationPath).Execute(commands...)
 	return destinationPath, nil
 }
