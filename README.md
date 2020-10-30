@@ -4,7 +4,8 @@ Organize your music library according its tags.
 
 ## Building
 ```sh
-go build
+cd cli
+go build -o tidy-music
 ```
 
 ## Usage
