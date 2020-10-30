@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/alancesar/tidy-music/command"
 	"github.com/alancesar/tidy-music/file"
 	"github.com/alancesar/tidy-music/processor"
 	"os"
@@ -32,9 +33,14 @@ func main() {
 	})
 
 	total := len(paths)
+	var commands []command.Command
+
+	if !*sandbox {
+		commands = []command.Command{command.MkDirCommand, os.Rename}
+	}
 
 	for index, path := range paths {
-		destination, err := processor.Process(path, *rootDestinationPath, *pattern, *sandbox)
+		destination, err := processor.Process(path, *rootDestinationPath, *pattern, commands...)
 		if err != nil && err != processor.MetadataErr {
 			panic(err)
 		}
