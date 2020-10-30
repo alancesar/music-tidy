@@ -31,11 +31,8 @@ func Process(sourcePath, rootDestination, pattern string, commands ...command.Co
 	destinationPath := filepath.Join(rootDestination, outputPath)
 	destinationPath = filepath.Clean(destinationPath)
 
-	for _, cmd := range commands {
-		if err := cmd(sourcePath, destinationPath); err != nil {
-			return destinationPath, err
-		}
+	if err := command.NewExecutor(sourcePath, destinationPath).Execute(commands...); err != nil {
+		return destinationPath, err
 	}
-
 	return destinationPath, nil
 }
