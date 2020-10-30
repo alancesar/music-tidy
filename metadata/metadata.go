@@ -6,8 +6,6 @@ import (
 	"os"
 )
 
-var empty = Metadata{}
-
 type Metadata struct {
 	Track  int
 	Title  string
@@ -38,7 +36,7 @@ func (e *Extractor) Extract() (Metadata, error) {
 
 	metadata, err := tag.ReadFrom(source)
 	if err != nil {
-		return empty, err
+		return Metadata{}, err
 	}
 
 	return buildOutput(metadata), nil
