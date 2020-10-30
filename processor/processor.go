@@ -1,15 +1,12 @@
 package processor
 
 import (
-	"errors"
 	"github.com/alancesar/tidy-music/command"
 	"github.com/alancesar/tidy-music/metadata"
 	"github.com/alancesar/tidy-music/path"
 	"os"
 	"path/filepath"
 )
-
-var MetadataErr = errors.New("no metadata found")
 
 func Process(sourcePath, rootDestination, pattern string, commands ...command.Command) (string, error) {
 	source, err := os.Open(sourcePath)
@@ -22,7 +19,7 @@ func Process(sourcePath, rootDestination, pattern string, commands ...command.Co
 
 	m, err := metadata.ExtractMetadata(source)
 	if err != nil {
-		return "", MetadataErr
+		return "", err
 	}
 
 	ext := filepath.Ext(sourcePath)
@@ -34,8 +31,8 @@ func Process(sourcePath, rootDestination, pattern string, commands ...command.Co
 	destinationPath := filepath.Join(rootDestination, outputPath)
 	destinationPath = filepath.Clean(destinationPath)
 
-	for _, command := range commands {
-		if err := command(sourcePath, destinationPath); err != nil {
+	for _, cmd := range commands {
+		if err := cmd(sourcePath, destinationPath); err != nil {
 			return destinationPath, err
 		}
 	}

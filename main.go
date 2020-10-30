@@ -4,9 +4,10 @@ import (
 	"flag"
 	"fmt"
 	"github.com/alancesar/tidy-music/command"
+	"github.com/alancesar/tidy-music/mime"
+	"github.com/alancesar/tidy-music/path"
 	"github.com/alancesar/tidy-music/processor"
 	"os"
-	"path/filepath"
 )
 
 const (
@@ -21,31 +22,21 @@ func main() {
 	flag.Parse()
 
 	fmt.Println("Reading source directory...")
-	paths := make([]string, 0)
-	_ = filepath.Walk(*rootSourcePath, func(path string, info os.FileInfo, err error) error {
-		if info.IsDir() {
-			return nil
-		}
-
-		paths = append(paths, path)
-		return nil
-	})
-
+	paths := path.LookFor(*rootSourcePath, mime.AudioType)
 	total := len(paths)
+
 	var commands []command.Command
 
 	if !*sandbox {
 		commands = []command.Command{command.MkDirCommand, os.Rename}
 	}
 
-	for index, path := range paths {
-		destination, err := processor.Process(path, *rootDestinationPath, *pattern, commands...)
-		if err != nil && err != processor.MetadataErr {
-			panic(err)
-		}
-
-		if err == nil {
-			fmt.Printf("(%d/%d) %s\n", index+1, total, destination)
+	for index, p := range paths {
+		destination, err := processor.Process(p, *rootDestinationPath, *pattern, commands...)
+		if err != nil {
+			fmt.Printf("(%d/%d) [failed ] %s\n", index+1, total, destination)
+		} else {
+			fmt.Printf("(%d/%d) [success] %s\n", index+1, total, destination)
 		}
 	}
 }
