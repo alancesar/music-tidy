@@ -1,3 +1,5 @@
+github.com/alancesar/tidy-file v1.0.0 h1:fTwPFpP7o8Dm9alR7moDN5hxh/A6524GNvnTZ2n/k9Y=
+github.com/alancesar/tidy-file v1.0.0/go.mod h1:CyacnJ+PGdpyf4b/W9pVWhCXC+sDDIdaPp+Ro7Dcazs=
 github.com/dhowden/tag v0.0.0-20200828214007-46e57f75dbfc h1:8ndBJ8cTZwp5Qtl5fnG5bM/ekMnm1GFdUSMTGiN09K0=
 github.com/dhowden/tag v0.0.0-20200828214007-46e57f75dbfc/go.mod h1:SniNVYuaD1jmdEEvi+7ywb1QFR7agjeTdGKyFb0p7Rw=
 github.com/gabriel-vasile/mimetype v1.1.1 h1:qbN9MPuRf3bstHu9zkI9jDWNfH//9+9kHxr9oRBBBOA=

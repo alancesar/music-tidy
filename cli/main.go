@@ -3,10 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/alancesar/tidy-music/command"
+	"github.com/alancesar/tidy-file/command"
+	"github.com/alancesar/tidy-file/mime"
+	"github.com/alancesar/tidy-file/path"
 	"github.com/alancesar/tidy-music/metadata"
-	"github.com/alancesar/tidy-music/mime"
-	"github.com/alancesar/tidy-music/path"
 	"os"
 	"path/filepath"
 )
@@ -47,7 +47,7 @@ func process(sourcePath, rootDestinationPath, pattern string, commands ...comman
 		return "", err
 	}
 
-	parsed, err := path.BuildFromPattern(pattern, m)
+	parsed, err := path.NewBuilder().FromPattern(pattern, m)
 	if err != nil {
 		return "", err
 	}
